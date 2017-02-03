@@ -465,4 +465,290 @@ return this.each(function(){
 
 저장하고 새로고침 하세요.
 
+## 부트스트랩 라이트박스를 사용한 이미지 표시
+
+**Events** 섹션에 없는 중요한 기능 중 하나는 이벤트를 설명하는 이미지를 포함하여 추가적인 정보를 제공하는 기능입니다. 물론 `img` 태그를 사용하여 이미지를 추가할 수는 있지만, 실용적이지는 않습니다. 이미지 크기가 컨테이너의 크기에 따라 제한되기 때문입니다.
+
+이 섹션에서는 사용자가 이미지를 클릭할 때, 이미지를 페이지에서 리다이렉션 하지 않고 이미지를 확대할 수 있도록 함으로써 이러한 제한을 극복할 수 있는 방법을 보여줍니다. 이를 위해 각 이벤트마다 하나의 이미지를 삽입합니다(*그림 5.8* 참조). 각 이미지는 이벤트 설명의 왼쪽에 정렬이 되며 너비는 80이고 높이는 45입니다.
+
+```html
+<div id="page-1">
+    <h3>My Sample Event #1</h3>
+    <p>
+        <img src="images/event1.jpg" align="left" width="80" height="45" /> 
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur leo dolor, fringilla vel lacus at, auctor finibus ipsum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi quis arcu lorem. Vivamus elementum convallis enim sagittis tincidunt. Nunc feugiat mollis risus non dictum. Nam commodo nec sapien a vestibulum. Duis et tellus cursus, laoreet ante non, mollis sem. Nullam vulputate justo nisi, sit amet bibendum ligula varius id.
+    </p>
+    <h3>My Sample Event #2</h3>
+    <p>
+        <img src="images/event2.jpg" align="left" width="80" height="45" />
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur leo dolor, fringilla vel lacus at, auctor finibus ipsum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi quis arcu lorem. Vivamus elementum convallis enim sagittis tincidunt. Nunc feugiat mollisrisus non dictum. Nam commodo nec sapien a vestibulum. Duis et tellus cursus, laoreet ante non, mollis sem. Nullam vulputate justo nisi, sit amet bibendum ligula varius id.
+    </p>
+</div>
+```
+
+이전 마크업을 저장하고 페이지를 새로고침하면 이미지가 텍스트와 잘 정렬되지 않은 상태로 보일 것입니다. 이것들은 좀 엉망으로 보입니다. 이미지, 텍스트 및 컨테이너 상단 사이의 간격을 추가하여 모양을 개선할 수 있습니다. 이렇게 하려면 `services-events-content` 컨테이너 안의 각각의 이미지에 `0.5em`위 위쪽 마진과 `1em`의 오른쪽 마진을 추가합니다.
+
+```css
+#services-events-content div img { 
+    margin-top: 0.5em; 
+    margin-right: 1em; 
+}
+```
+
+> **참고**
+>
+> 알고 있나요?
+>
+> 특정 클래스를 사용하여 앞에서 언급한 문제를 해결할 수 있습니다(실제로도 더 깔끔한 방법일 수 있습니다). 혼자서 이러한 룰을 만들어보세요.
+
+다음 스크린 샷을 살펴보기 바랍니다.
+
+![](/assets/image_05_008.jpg)
+
+*그림 5.8*: 각 이벤트의 설명과 함께 제공된 샘플 이미지. 이 이미지들은 좌측으로 정렬되며 80 x 45 크기입니다.
+
+사용자가 이벤트 설명에 포함된 이미지를 확대할 수 있게 해주는 서드파티 라이브러리는 [https://github.com/jbutz/bootstrap-lightbox](https://github.com/jbutz/bootstrap-lightbox) GitHub에서 제공되는 부트스트랩 라이트박스입니다. 불행히도 이 플러그인은 더이상 유지보수 되지 않고 여러 가지 수정되지 않은 버그와 유용성에 문제가 있습니다. 다운로드하자마자 그것이 즉시 작동하지 않는 다는 것을 알게 될 것입니다. 운좋게도 DJ Interative([http://djinteractive.co.uk/](http://djinteractive.co.uk/))는 원래 부트스트랩 라이트 박스를 확장했습니다. 또한 GitHub([https://github.com/djinteractive/Lightbox-for-Bootstrap](https://github.com/djinteractive/Lightbox-for-Bootstrap))를 통해 사용할 수 있으며, 플러그인은 Creative Commons Attribution 2.5 라이센스를 따라 게시됩니다. 즉, 플러그인 작성자가 올바르게 기여한 조건에서 플러그인을 무료로 사용할 수 있습니다.
+
+부트스트랩용 라이트박스를 다운로드하고 자바스크립트 파일과 CSS 파일을 HTML 문서의 `head` 안에 포함시키세요.
+
+```html
+<script src="bower_components/lightbox-for-bootstrap/js/bootstrap.lightbox.js"></script>
+<link rel="stylesheet" href="bower_components/bootstrap-lightbox/css/bootstrap.lightbox.css" />
+```
+
+다행히도 라이트박스 내에 이미지를 표시하기 위해 플러그인을 사용할 때 기존 마크업을 거의 수정할 필요가 없습니다. 수행할 두 단계는 다음과 같습니다.
+
+1. 기존의 `img` 요소를 `thumbnail` 클래스와 `data-toggle` 어트리뷰트를 가진 컨테이너 요소 안에 배치합니다.
+2. `thumbnail` 클래스와 `data-target` 속성을 `img` 요소에 적용합니다.
+    ```html
+<p>
+    <span class="thumbnails" data-toggle="lightbox"> 
+        <img src="images/event1.jpg" align="left" width="80" height="45" class="thumbnail" data-target="images/event1.jpg"/> 
+    </span> 
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur leo dolor,fringilla vel lacus at, auctor finibus ipsum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi quis arcu lorem. Vivamus elementum convallis enim sagittis tincidunt. Nunc feugiat mollis risus non dictum. Nam commodo nec sapien a vestibulum. Duis et tellus cursus, laoreet ante non, mollis sem. Nullam vulputate justo nisi, sit amet bibendum ligula varius id.
+</p>
+    ```
+
+`data-target` 어트리뷰트는 더 큰 이미지가 있는 것을 라이트박스에게 알려줍니다. 이미지 요소의 `src` 어트리뷰트는 라이트 박스 내에 표시될 이미지에 영향을 주지 않습니다. `data-target` 어트리뷰트만이 이를 판별합니다. 따라서 썸네일 이미지를 표시할 수 있습니다. 이 이미지는 다른 라이트박스 이미지에 실제로 연결됩니다. `data-toggle` 속성은 라이트박스 토글로 사용되는 요소를 식별하는 데 사용됩니다. 이 경우 토글은 80 x 45 크기의 이미지입니다. 그러나 토글은 이미지 요소일 필요가 없다는 점에 유의해야 합니다. 모든 요소는 라이트박스의 토글이 될 수 있습니다.
+
+마지막으로 `thumbnails` 클래스는 `lightbox` 플러그인의 셀렉터 역할을 합니다. 이러한 기능이 없으면 원하는 기능이 작동하지 않습니다. 다음 스크린샷을 살펴보세요.
+
+![](/assets/image_05_009.jpg)
+
+*그림 5.9*: 부트스트랩의 라이트박스를 사용하여 확대된 이미지가 표시됩니다.
+
+요약하면 **Events** 섹션은 다음과 같습니다.
+
+```html
+<div class="container">
+    <div class="row" style="margin: 1em;">
+        <div id="services-events-content">
+            <div id="page-1">
+                <h3>My Sample Event #1</h3>
+                <p>
+                    <span class="thumbnails" data-toggle="lightbox"> 
+                        <img src="images/event1.jpg" align="left" width="80" height="45" class="thumbnail" data-target="images/event1.jpg"/> 
+                    </span>
+                    Lorem ipsum...
+                </p>
+                <h3>My Sample Event #2</h3>
+                <p>
+                    <span class="thumbnails" data-toggle="lightbox"> 
+                        <img src="images/event2.jpg" align="left" width="80" height="45" class="thumbnail" data-target="images/event2.jpg"/> 
+                    </span>
+                    Lorem ipsum...
+                </p>
+            </div>
+            <div id="page-2">
+                <h3>My Sample Event #3</h3>
+                <p>
+                    <span class="thumbnails" data-toggle="lightbox"> 
+                        <img src="images/event3.jpg" align="left" width="80" height="45" class="thumbnail" data-target="images/event3.jpg"/> 
+                    </span>
+                     Lorem ipsum...
+                </p>
+            </div>
+        </div>
+        <div id="services-events-pagination"></div>
+    </div>
+</div>
+```
+
+## DataTables로 가격 리스트 개선하기
+
+**Events** 섹션을 그대로 두고 **2장. 스타일 구문 만들기**와 **3장. 레이아웃 구축하기**에서 작성한 가격 목록으로 이동할 시간입니다. 현재 표시된 데이터의 경우 기존 테이블 구조가 완벽하게 작동합니다. 가격은 멋지게 제시되고 테이블도 빽빽하지 않고 좋습니다. 그러나 `MyPhoto`가 수백가지의 가격을 표시해야 한다면(네. 이 경우에는 당연한 것으로 보일 수 있지만 데모 목적으로 사용하지 마세요), 우리듸 기존 테이블 구조는 디스플레이 용량을 훨씬 초과합니다. 열이 너무 많아서 테이블을 체계적으로 유지하는 데 도움이 되는 몇 가지 형식의 페이지매김을 구현해야 합니다. 물론 이전 섹션을 읽은 경우 서드파티 플러그인을 사용하여 페이지매김을 구현하는 것이 얼마나 쉬운 지 알 수 있습니다. 그러나 수백 또는 수천 개의 항목을 사용하면, 페이지 매김을 통한 웹사이트를 사용할 수 없게 됩니다. 사용자는 표 형식의 데이터를 필터링 하는 기능이나 표의 특정 항목을 검색하는 기능과 같은 고급 기능을 필요로 할 수 있습니다. 또한 사용자는 페이지 당 표시되는 테이블 항목 수를 조정할 수 있습니다. 이러한 모든 요구 사항은 테이블 구현을 매우 복잡하고 어렵게 만듭니다. 그러나 이러한 사용자 요구사항에 대해서는 일반적으로 잘 이해되고 있고 연구가 되어 있습니다. 이 때문에 우리 `MyPhoto`의 가격 목록을 향상시키기 위해 사용할 수 있는 우수한 타사 라이브러리가 있습니다. DataTables([https://www.datatables.net/](https://www.datatables.net/))를 만나세요. DataTables는 부트스트랩 스타일을 포함하는 jQuery 플러그인으로 이전에 언급한 모든 기능을 제공합니다.
+
+DataTables를 사용하려면 DataTables 웹사이트를 통해 커스터마이즈 한 자신만의 빌드를 만들거나(정교한 다운로드 빌더를 제공) Bower를 사용할 수 있습니다.
+
+```bash
+bower install DataTables
+```
+
+설치가 완료되면 `bower_components/DataTables` 디렉토리를 찾아야 합니다.
+
+이 디렉토리 안에는 `media/`가 자바스크립트 파일과 CSS 파일을 포함하고 있습니다. 이 파일들을 문서의 헤드에 포함시킬 수 있습니다. 특히 디렉토리에는 일반적인 jQuery 플러그인과 스타일은 물론 부트스트랩 관련 스타일이 포함됩니다.
+
+* `dataTables.bootstrap.min.js`
+* `jquery.dataTables.min.js`
+* `dataTables.bootstrap.min.css`
+
+파일을 통합해 보겠습니다.
+
+```html
+<script src="bower_components/DataTables/media/js/jquery.dataTables.min.js"></script> 
+<script src="bower_components/DataTables/media/js/dataTables.bootstrap.min.js"></script> 
+<link rel="stylesheet" href="bower_components/DataTables/media/css/dataTables.bootstrap.min.css" /> 
+```
+
+새롭게 포함 된 `dataTables`에 들어가기 전에 출력 크기와 가격을 재구성해야 합니다. 이전과 같은 데이터셋을 사용하여 테이블을 생성하세요. 단 간단하게 하기 위해 하나의 가격 세트만 표시할 수 있습니다.
+
+```html
+<table id="services-prints-table">
+    <thead>
+        <tr>
+            <th> Extra Large</th>
+            <th>Large</th>
+            <th>Medium</th>
+            <th>Small</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>24x36 (€60)</td>
+            <td>19x27 (€45)</td>
+            <td>12x18 (€28)</td>
+            <td>6x5 (€15)</td>
+        </tr>
+        <tr>
+            <td>27x39 (€75)</td>
+            <td>20x30 (€48)</td>
+            <td>16x20 (€35)</td>
+            <td>8x10 (€18)</td>
+        </tr>
+        <tr>
+            <td>27x40 (€75)</td>
+            <td>22x28 (€55)</td>
+            <td>18x24 (€40)</td>
+            <td>11x17 (€55)</td>
+        </tr>
+    </tbody>
+</table>
+```
+
+앞의 표는 헤더와 본문이 있는 표준 HTML입니다. 저장하고 새로고침 하세요. 좋습니다. 이제 우리에게 평이하고 간단한 테이블이 생겼습니다. 다음으로 진행할 것은 스타일을 지정하는 것입니다. 먼저 `width`를 `100%`로 만들어서 사용할 수 있는 전체 공간을 모두 사용하도록 테이블을 설정합니다. 그런 다음 `table` 및 `table-striped` 두 개의 부트스트랩 클래스를 적용합니다. 전자인 `table` 클래스는 패딩, 선 높이 및 수직 정렬을 조정하여 테이블에 기본적인 표 스타일을 적용합니다. 후자인 `table-striped` 클래스는 개별 행의 색상을 번갈아가며 변경합니다.
+
+```html
+<table id="services-prints-table" class="table table-striped" width="100%">
+    <thead>
+        <!-- Content here-->
+    </thead>
+    <tbody>
+        <!--Content here-->
+    </tbody>
+</table>
+```
+
+데이터 테이블을 초기화 하려면 한 줄의 코드만 있으면 됩니다.
+
+```javascript
+$('#services-prints-table').DataTable();
+```
+
+저장하고 새로고침을 합니다. 즉시 테이블이 컨테이너 외부로 넘치는 것을 볼 수 있습니다. 이 문제를 해결하려면 `table` 요소를 `div`로 감싸고 `div`에 최대 너비 90%를 지정합니다(데모용으로 인라인 스타일을 사용하지만, 항상 인라인 스타일 사용은 지양해야 합니다).
+
+```html
+<div style="max-width: 90%;"> 
+    <table id="services-prints-table" class="display">...</table> 
+</div>
+```
+
+다시 한번 저장하고 새로고침 합니다. 테이블은 잘 보입니다(*그림 5.10* 참고). 이 테이블을 가지고 한 번 사용해 보세요. 검색 창을 사용하여 특정한 행을 필터링 하거나 행을 추가하고 표가 페이지로 연결되는 것을 확인해보세요. 추가적인 작업 없이도 페이지 당 표시할 항목 수를 제어할 수도 있습니다. 다음 스크린 샷을 살펴보세요.
+
+![](/assets/image_05_010.jpg)
+
+*그림 5.10*: datatables 가격 목록에 부트스트랩이 아닌 변형입니다. 깨지 페이지 매김 표시에 유의하세요.
+
+`bootpag`에서와 마찬가지로 `dataTable` 플러그인이 부트스트랩 3의 페이지매김 방식을 적용한다는 점에 유의하기 바랍니다. 플러그인이 부트스트랩 4와 호환될 수 있도록 하려면 먼저 `dataTables.bootstrap.js` 파일을 `js` 폴더(`bootpag` 수정 시 작성한 폴더)에 복사해 넣고 63번 라인으로 이동하세요. `switch` 문은 사용할 목록 아이템의 클래스를 결정합니다. `switch`문 바로 뒤에 다음 줄을 추가하세요.
+
+```javascript
+btnClass += 'page-item table-page-item';
+```
+
+또한 `page-link` 클래스를 포함하도록 앵커 요소를 생성하는 109번 라인을 업데이트 합니다.
+
+```javascript
+.append($('<a>', {
+        'class': 'page-link',
+
+        'href': '#',
+
+        'aria-controls': settings.sTableId,
+        'data-dt-idx': counter,
+        'tabindex': settings.iTabIndex
+    })
+    .html(btnDisplay)
+)
+```
+
+`page-item` 클래스와 함께 `table-page-item` 클래스를 추가하는 방법에 유의하기 바랍니다. 이제 다음과 같이 정의하도록 합니다.
+
+```css
+.table-page-item {
+    margin-left: 0.5rem;
+}
+```
+
+다음 스크린샷을 살펴보기 바랍니다.
+
+![](/assets/image_05_011.jpg)
+
+*그림 5.11*: 고정된 DataTable, 페이지매김 콘트롤 및 이용 약관에 대한 레이블 적용
+
+이 섹션을 끝내기 위해 다음과 같이 완전한 가격 섹션을 작성합니다.
+
+```html
+<div class="container">
+    <h1 class="hidden-md">Our Print Sizes</h1>
+    <div style="max-width: 90%;">
+        <table id="services-prints-table" class="table table-striped" width="100%">
+            <thead>
+                <tr>
+                    <th>Extra Large</th>
+                    <th>Large</th>
+                    <th>Medium</th>
+                    <th>Small</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>24x36 (€60)</td>
+                    <td>19x27 (€45)</td>
+                    <td>12x18 (€28)</td>
+                    <td>6x5 (€15)</td>
+                </tr>
+                <tr>
+                    <td>27x39 (€75)</td>
+                    <td>20x30 (€48)</td>
+                    <td>16x20 (€35)</td>
+                    <td>8x10 (€18)</td>
+                </tr>
+                <tr>
+                    <td>27x40 (€75)</td>
+                    <td>22x28 (€55)</td>
+                    <td>18x24 (€40)</td>
+                    <td>11x17 (€55)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+```
+
+## 요약
+
+이 장에서는 타사 라이브러리를 사용하여 일반적인 사용자 인터페이스의 개발 요구 사항을 해결하는 법에 대해 배웠습니다. 이전 장에서 다양한 기능들을 향상시킴으로써 jQuery 브라우저 플러그인을 사용하여 사용자의 브라우저와 버전을 감지하는 방법을 보여주었습니다. 우리는 사용자가 데이터를 탐색할 수 있도록 `bootpag` 플러그인을 사용했습니다. 이와 함께 이미지 및 라이트박스를 사용하여 부트스트랩에 대한 **Events** 섹션의 모양과 느낌을 향상시켰습니다. 또한 DataTables를 사용하여 가격 목록의 사용성을 개선하는 방법에 대해서도 살펴 보았습니다.
+
+널리 사용되는 타사 라이브러리를 사용하는 방법에 대한 지식으로 무장한 우리는 이제 우리의 정확한 요구에 맞게 부트스트랩의 jQuery 플러그인을 커스터마이징 할 준비가 되었습니다. 다음 장으로 이동하세요.
+
+
 
